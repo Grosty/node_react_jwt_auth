@@ -9,3 +9,5 @@ typings/
 .env.test
 
 dist
+vscode
+.idea
