@@ -11,3 +11,4 @@ typings/
 dist
 vscode
 .idea
+coverage
