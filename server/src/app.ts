@@ -1,20 +1,33 @@
 import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv-safe';
-import sum from '@src/controllers/add.controller';
-
-const app: Application = express();
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import mongoose from 'mongoose';
+import router from '@src/router';
 
 dotenv.config();
-
-console.log(process.env.MY_NAME, process.env.TOKEN);
-
+const app: Application = express();
 const PORT: number | string = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response): void => {
-  const sumNum: number = sum(4, 5);
-  res.send(`Hello ${sumNum}`);
-});
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
+app.use('/api', router);
 
-app.listen(PORT, () => {
-  console.log(`Server started ${PORT} port`);
-});
+const start = async (): Promise<any> => {
+  try {
+    const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+    await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
+    app.listen(PORT, () => {
+      console.log(`Server started ${PORT} port`);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+start();
