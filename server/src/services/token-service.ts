@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 import tokenModel from '@src/models/token-model';
-import { ITokens } from '@src/interfaces';
+import config from '@src/config';
+import { ITokens, IUserDto } from '@src/interfaces';
 
 class TokenService {
-  static generateTokens(payload: any): ITokens {
-    const accessToken: string = jwt.sign(payload, process.env.JWT_ACCESS_SECRET as string, { expiresIn: '15m' });
-    const refreshToken: string = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, { expiresIn: '30d' });
+  static generateTokens(payload: IUserDto): ITokens {
+    const accessToken: string = jwt.sign(payload, config.jwt_secrets.access, { expiresIn: '15m' });
+    const refreshToken: string = jwt.sign(payload, config.jwt_secrets.refresh, { expiresIn: '30d' });
     return {
       accessToken,
       refreshToken,

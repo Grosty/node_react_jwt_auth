@@ -1,30 +1,28 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import dotenv from 'dotenv-safe';
-
-dotenv.config();
+import config from '@src/config';
 
 class MailService {
   private readonly transporter: Mail<SMTPTransport.SentMessageInfo>;
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
+      host: config.smtp.host,
+      port: config.smtp.port,
       secure: false,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
+        user: config.smtp.user,
+        pass: config.smtp.password,
       },
     } as SMTPTransport.Options);
   }
 
   async sendActivationMail(to: string, link: string): Promise<void> {
     const res = await this.transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: config.smtp.user,
       to,
-      subject: `Активация аккаунта на ${process.env.API_URL}`,
+      subject: `Активация аккаунта на ${config.app.api_uri}`,
       text: '',
       html: `
           <div>
