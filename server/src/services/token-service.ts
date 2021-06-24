@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import tokenModel from '@src/models/token-model';
 import config from '@src/config';
 import { ITokens, IUserDto } from '@src/interfaces';
@@ -13,6 +13,24 @@ class TokenService {
     };
   }
 
+  static validateAccessToken(token: string): any {
+    try {
+      const userData = jwt.verify(token, config.jwt_secrets.access);
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static validateRefreshToken(token: string): any {
+    try {
+      const userData = jwt.verify(token, config.jwt_secrets.refresh);
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
   static async saveToken(userId: string, refreshToken: string): Promise<ITokens> {
     const tokenData = await tokenModel.findOne({ user: userId });
     if (tokenData) {
@@ -21,6 +39,16 @@ class TokenService {
     }
     const token: ITokens = await tokenModel.create({ user: userId, refreshToken });
     return token;
+  }
+
+  static async removeToken(refreshToken: string): Promise<ITokens> {
+    const tokenData = await tokenModel.deleteOne({ refreshToken });
+    return tokenData;
+  }
+
+  static async findToken(refreshToken: string): Promise<ITokens> {
+    const tokenData = await tokenModel.findOne({ refreshToken });
+    return tokenData;
   }
 }
 
