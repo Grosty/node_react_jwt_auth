@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import tokenModel from '@src/models/token-model';
 import config from '@src/config';
 import { ITokens, IUserDto } from '@src/interfaces';

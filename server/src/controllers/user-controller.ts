@@ -71,7 +71,8 @@ class UserController {
 
   static async getUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
-      res.json(['loh', 'dstr']);
+      const users: any[] = await UserService.getAllUsers();
+      return res.json(users);
     } catch (e) {
       return next(e);
     }
