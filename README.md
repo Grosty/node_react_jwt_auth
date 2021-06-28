@@ -1,2 +1,2 @@
 # node_react_jwt_auth
-TyprScript Auth jwt Node React
+TypeScript Auth jwt Node React
