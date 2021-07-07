@@ -10,7 +10,12 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: config.client.url,
+  })
+);
 app.use('/api', router);
 app.use(errorMiddleware);
 
